@@ -6,11 +6,7 @@ const paginationHelper = require("../../helpers/pagination");
 
 //[GET] /admin/products 
 module.exports.index = async (req, res) => {
-    
     const filterStatus = filterStatusHelper(req.query);
-
-    console.log(filterStatus);
-
     let find = {
         deleted: false,
     };
@@ -33,12 +29,15 @@ module.exports.index = async (req, res) => {
         currentPage: 1,
         limitItems: 4
     },
-    req.query,
+    req .query,
     countProducts 
 );
-    // End Pagination
+     // End Pagination
 
-    const products = await Product.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip);
+    const products = await Product.find(find)
+    .sort({ position: "desc"})
+    .limit(objectPagination.limitItems)
+    .skip(objectPagination.skip);
 
     res.render("admin/pages/products/index", {
         pageTitle: "Danh sách sản phẩm",
@@ -73,9 +72,30 @@ module.exports.changeMulti = async (req, res) => {
     case "inactive":
         await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
         break;
+    case "delete-all":
+        await Product.updateMany({ _id: { $in: ids } }, { deleted: true, deletedAt: new Date() });
+        break;
+    case "change-position":
+        for(const item of ids){ //phải dùng vòng lặp for do dùng nhiều sản phẩm
+            let [id, position] = item.split("-");
+            position = parseInt(position);//ép kiểu string về number
+            // console.log(id);
+            // console.log(position);
+            await Product.updateOne({ _id: id }, { position: position });
+        }
+        break;
     default:
         break;
    }
 
    res.redirect("back");
+};
+
+//[PATCH] /admin/products/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+
+    await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() });
+
+    res.redirect("back");
 };

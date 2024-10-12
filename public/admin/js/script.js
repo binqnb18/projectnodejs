@@ -30,7 +30,7 @@ if (formSearch) {
     if (keyword) {
       url.searchParams.set("keyword", keyword);
     } else {
-      url.searchParams.set("keyword");
+      url.searchParams.delete("keyword");
     }
     window.location.href = url.href;
   });
@@ -47,7 +47,6 @@ if (buttonsPagination) {
       const page = button.getAttribute("button-pagination");
 
       url.searchParams.set("page", page);
-
       window.location.href = url.href;
     });
   });
@@ -100,13 +99,30 @@ if (formChangeMulti) {
       "input[name='id']:checked"
     );
 
+    const typeChange = e.target.elements.type.value;
+    
+    if(typeChange == "delete-all"){
+      const isConfirm = confirm("Bạn có chắc muốn xóa những sản phẩm này?");
+
+      if(!isConfirm){
+        return;
+      }
+    }
+
     if(inputsChecked.length > 0) {
         let ids = [];
         const inputIds = formChangeMulti.querySelector("input[name='ids']");
 
         inputsChecked.forEach(input => {
             const id = input.value; //hoặc  getAttribute("value")
-            ids.push(id);
+
+            if(typeChange == "change-position"){
+              const position = input.closest("tr").querySelector("input[name='position']").value;
+              
+              ids.push(`${id}-${position}`);
+            }else{
+              ids.push(id);
+            }
         });
         
         inputIds.value = ids.join(", ");

@@ -19,6 +19,7 @@ app.use(methodOverride("_method"));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 
 app.set("views", "./views");
 app.set("view engine", "pug");

@@ -1,24 +1,47 @@
 mixin pagination(pagination)
-        nav
-            ul(class="pagination")
+    nav
+        ul(class="pagination")
             
-                if(pagination.currentPage > 1)
-                    li(class="page-item")
-                        button(
-                            class="page-link"
-                            button-pagination=pagination.currentPage - 1
-                        ) Trang trước
+            // Nút để đến trang đầu tiên
+            if(pagination.currentPage > 1)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=1
+                    ) <<
 
-                - for (var i = 1; i <= pagination.totalPage; i++)
+            // Nút "Trang trước"
+            if(pagination.currentPage > 1)
+                li(class="page-item")
+                    button(
+                        class="page-link" 
+                        button-pagination=pagination.currentPage - 1
+                    ) <
+
+            // Hiển thị các trang ở gần trang hiện tại (3 trước và 3 sau)
+            - for (var i = 1; i <= pagination.totalPage; i++)
+                if (i === 1 || i === pagination.totalPage || (i >= pagination.currentPage - 3 && i <= pagination.currentPage + 3))
                     li(class=`page-item ${pagination.currentPage == i ? "active" : ""}`)
                         button(
                             class="page-link"
                             button-pagination=i
                         ) #{i}
+                else if (i === pagination.currentPage - 4 || i === pagination.currentPage + 4)
+                    li(class="page-item disabled")
+                        span(class="page-link") ...
 
-                if(pagination.currentPage < pagination.totalPage)
-                    li(class="page-item")
-                        button(
-                            class="page-link"
-                            button-pagination=pagination.currentPage + 1
-                        ) Kế tiếp
+            // Nút "Trang kế tiếp"
+            if(pagination.currentPage < pagination.totalPage)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.currentPage + 1
+                    ) >
+
+            // Nút để đến trang cuối cùng
+            if(pagination.currentPage < pagination.totalPage)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.totalPage
+                    ) >>
