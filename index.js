@@ -33,7 +33,7 @@ app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
 // End flash
 
-//App locals Variable
+//App locals Variable, chỉ dùng được file pug k được dùng trong file controller
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 app.use(express.static("public"));
