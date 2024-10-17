@@ -24,7 +24,7 @@ app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 
 // Flash
@@ -36,7 +36,7 @@ app.use(flash());
 //App locals Variable, chỉ dùng được file pug k được dùng trong file controller
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 //Routes
 route(app);
