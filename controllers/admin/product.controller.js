@@ -132,9 +132,9 @@ module.exports.createPost = async (req, res) => {
       req.body.position = parseInt(req.body.position);
     }
 
-    if(req.file){
-      req.body.thumbnail =`/uploads/${req.file.filename}`;//sửa chỗ này
-    }
+    // if(req.file){
+    //   req.body.thumbnail =`/uploads/${req.file.filename}`;//sửa chỗ này, đoạn này đã đưa sang file route nên xóa
+    // }
 
     const product = new Product(req.body);
     await product.save();
