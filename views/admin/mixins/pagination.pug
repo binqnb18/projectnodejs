@@ -1,9 +1,12 @@
 mixin pagination(pagination)
     nav
         ul(class="pagination")
-            
+            // Kiểm tra nếu `pagination` tồn tại và có các giá trị hợp lệ
+            - let currentPage = pagination && pagination.currentPage ? pagination.currentPage : 1;
+            - let totalPage = pagination && pagination.totalPage ? pagination.totalPage : 1;
+
             // Nút để đến trang đầu tiên
-            if(pagination.currentPage > 1)
+            if (currentPage > 1)
                 li(class="page-item")
                     button(
                         class="page-link"
@@ -11,37 +14,37 @@ mixin pagination(pagination)
                     ) <<
 
             // Nút "Trang trước"
-            if(pagination.currentPage > 1)
+            if (currentPage > 1)
                 li(class="page-item")
                     button(
                         class="page-link" 
-                        button-pagination=pagination.currentPage - 1
+                        button-pagination=currentPage - 1
                     ) <
 
             // Hiển thị các trang ở gần trang hiện tại (3 trước và 3 sau)
-            - for (var i = 1; i <= pagination.totalPage; i++)
-                if (i === 1 || i === pagination.totalPage || (i >= pagination.currentPage - 3 && i <= pagination.currentPage + 3))
-                    li(class=`page-item ${pagination.currentPage == i ? "active" : ""}`)
+            - for (var i = 1; i <= totalPage; i++)
+                if (i === 1 || i === totalPage || (i >= currentPage - 3 && i <= currentPage + 3))
+                    li(class=`page-item ${currentPage == i ? "active" : ""}`)
                         button(
                             class="page-link"
                             button-pagination=i
                         ) #{i}
-                else if (i === pagination.currentPage - 4 || i === pagination.currentPage + 4)
+                else if (i === currentPage - 4 || i === currentPage + 4)
                     li(class="page-item disabled")
                         span(class="page-link") ...
 
             // Nút "Trang kế tiếp"
-            if(pagination.currentPage < pagination.totalPage)
+            if (currentPage < totalPage)
                 li(class="page-item")
                     button(
                         class="page-link"
-                        button-pagination=pagination.currentPage + 1
+                        button-pagination=currentPage + 1
                     ) >
 
             // Nút để đến trang cuối cùng
-            if(pagination.currentPage < pagination.totalPage)
+            if (currentPage < totalPage)
                 li(class="page-item")
                     button(
                         class="page-link"
-                        button-pagination=pagination.totalPage
+                        button-pagination=totalPage
                     ) >>
